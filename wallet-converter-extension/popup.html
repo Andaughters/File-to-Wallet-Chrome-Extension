@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wallet Converter</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-logo">
+        <span class="material-icons text-primary">account_balance_wallet</span>
+        <h1>Wallet Converter</h1>
+      </div>
+      <p class="header-subtitle">Convert to wallet.dat or .wallet formats</p>
+    </header>
+
+    <main>
+      <!-- File Upload Section -->
+      <div class="upload-container" id="upload_container">
+        <div class="dropzone" id="dropzone">
+          <span class="material-icons">cloud_upload</span>
+          <p>Drag & drop your file here</p>
+          <p class="dropzone-subtitle">or</p>
+          <button id="browse_button" class="browse-button">Browse Files</button>
+          <input type="file" id="file_input" class="file-input" />
+        </div>
+      </div>
+
+      <!-- File Preview Section (Hidden initially) -->
+      <div id="file_preview" class="file-preview hidden">
+        <!-- Will be populated by JavaScript -->
+      </div>
+
+      <!-- File Options Section (Hidden initially) -->
+      <div id="file_options" class="file-options hidden">
+        <div class="file-options-header">
+          <h3><span class="material-icons">settings</span>Output Options</h3>
+          <button id="remove_file" class="icon-button">
+            <span class="material-icons">close</span>
+          </button>
+        </div>
+        
+        <!-- Format Selection -->
+        <div class="format-selection">
+          <label>Select Wallet Output Format</label>
+          <div class="format-options">
+            <label class="format-option">
+              <input type="radio" name="format" value="wallet" checked />
+              <span class="format-label"><span class="material-icons">wallet</span>.wallet</span>
+            </label>
+            <label class="format-option">
+              <input type="radio" name="format" value="dat" />
+              <span class="format-label"><span class="material-icons">dns</span>wallet.dat</span>
+            </label>
+          </div>
+          <p class="format-help">
+            <span class="material-icons">info</span>
+            Choose the format that matches your wallet software requirements.
+          </p>
+        </div>
+
+        <!-- Output Filename -->
+        <div class="filename-input">
+          <label>Output Filename</label>
+          <div class="filename-field">
+            <input type="text" id="filename_input" placeholder="my-wallet" />
+            <span id="extension_display">.wallet</span>
+          </div>
+          <p class="filename-help">Customize the filename of your wallet file.</p>
+        </div>
+        
+        <!-- Estimated Size -->
+        <div class="estimated-size">
+          <div class="size-header">
+            <span>Estimated Output Size</span>
+            <span id="size_estimate">Unknown</span>
+          </div>
+          <p class="size-help">Approximate size of the generated wallet file.</p>
+        </div>
+      </div>
+
+      <!-- Processing Status (Hidden initially) -->
+      <div id="processing_status" class="processing-status hidden">
+        <div class="loader"></div>
+        <p>Processing your wallet file...</p>
+      </div>
+
+      <!-- Success Message (Hidden initially) -->
+      <div id="success_message" class="success-message hidden">
+        <span class="material-icons">check_circle</span>
+        <h3>Wallet File Generated!</h3>
+        <p>Your wallet file has been successfully created and downloaded.</p>
+      </div>
+
+      <!-- Error Message (Hidden initially) -->
+      <div id="error_message" class="error-message hidden">
+        <span class="material-icons">error</span>
+        <h3>Validation Failed</h3>
+        <p id="error_details">Unable to process the file.</p>
+        <button id="try_again" class="try-again-button">Try Again with Another File</button>
+      </div>
+
+      <!-- Generate Button -->
+      <div class="action-buttons">
+        <button id="generate_wallet" class="generate-button" disabled>
+          Generate Wallet File
+        </button>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span class="material-icons">lock</span>
+      <div>
+        <p class="footer-headline">100% Private & Secure:</p>
+        <p>All processing happens locally in your browser.</p>
+        <p><strong>No data leaves your device at any time.</strong></p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="wallet-builder.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

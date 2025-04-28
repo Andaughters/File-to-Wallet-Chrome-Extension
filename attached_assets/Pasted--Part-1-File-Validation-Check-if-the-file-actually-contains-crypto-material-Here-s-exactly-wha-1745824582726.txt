@@ -1,0 +1,137 @@
+🛠️ Part 1: File Validation (Check if the file actually contains crypto material)
+Here’s exactly what we should validate:
+
+
+Type	What to Check
+WIF Private Key	Base58 string starting with 5, K, or L (51 or 52 chars long)
+Raw Private Key	64 hex characters (0-9, a-f)
+Mnemonic Seed	12, 15, 18, 21, or 24 space-separated dictionary words
+xpub/xprv	Extended public/private keys (start with xpub, xprv)
+✅ Here’s the validation code you can plug into your popup.js:
+
+javascript
+Copy
+Edit
+function isValidPrivateKey(content) {
+  const wifRegex = /^[5KL][1-9A-HJ-NP-Za-km-z]{50,51}$/;  // WIF
+  const hexRegex = /^[0-9a-fA-F]{64}$/;                   // 64-char hex
+  return wifRegex.test(content.trim()) || hexRegex.test(content.trim());
+}
+
+function isValidMnemonic(content) {
+  const words = content.trim().split(/\s+/);
+  return [12, 15, 18, 21, 24].includes(words.length);
+}
+
+function isValidExtendedKey(content) {
+  return content.startsWith("xpub") || content.startsWith("xprv");
+}
+
+function validateFileContent(content) {
+  return isValidPrivateKey(content) || isValidMnemonic(content) || isValidExtendedKey(content);
+}
+✅ Then update your handleFile(file) function to use it:
+
+javascript
+Copy
+Edit
+function handleFile(file) {
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    const content = event.target.result.trim();
+    if (validateFileContent(content)) {
+      document.getElementById('file_info').innerText = `Loaded: ${file.name}`;
+      window.parsedContent = content;
+      document.getElementById('generate_wallet').disabled = false;
+    } else {
+      document.getElementById('file_info').innerText = `Invalid crypto data. Please upload a valid key or mnemonic file.`;
+      window.parsedContent = null;
+      document.getElementById('generate_wallet').disabled = true;
+    }
+  };
+  reader.readAsText(file);
+}
+✅ Now if the file has junk inside (wrong format), it will NOT proceed.
+
+✅ Only real private keys, mnemonics, or xpub/xprv keys will pass.
+
+🛠️ Part 2: Proper Electrum Wallet .wallet Generator
+Now, let’s build a real Electrum wallet file based on what type of input the user gave you.
+
+✅ Here's an updated wallet-builder.js:
+
+javascript
+Copy
+Edit
+function buildWallet(content) {
+  content = content.trim();
+
+  if (isValidMnemonic(content)) {
+    // It's a seed phrase
+    return JSON.stringify({
+      "seed_version": 17,
+      "wallet_type": "standard",
+      "keystore": {
+        "type": "bip39",
+        "seed": content,
+        "password": null
+      }
+    }, null, 2);
+  } else if (isValidPrivateKey(content)) {
+    // It's a single private key
+    return JSON.stringify({
+      "seed_version": 17,
+      "wallet_type": "imported",
+      "keystore": {
+        "type": "imported",
+        "keypairs": {
+          "imported_address": content
+        }
+      }
+    }, null, 2);
+  } else if (isValidExtendedKey(content)) {
+    // It's an extended xpub/xprv
+    return JSON.stringify({
+      "seed_version": 17,
+      "wallet_type": "standard",
+      "keystore": {
+        "type": "bip32",
+        "xpub": content
+      }
+    }, null, 2);
+  } else {
+    throw new Error("Unsupported file content format.");
+  }
+}
+✅ It dynamically detects:
+
+mnemonic → makes a standard Electrum wallet
+
+private key → makes an imported Electrum wallet
+
+xpub/xprv → makes a hierarchical wallet
+
+✅ Clean, simple, powerful.
+
+🛡️ Bonus: Add a Small Error Handler
+Wrap your "Generate Wallet" button action:
+
+javascript
+Copy
+Edit
+document.getElementById('generate_wallet').addEventListener('click', () => {
+  if (window.parsedContent) {
+    try {
+      const walletData = buildWallet(window.parsedContent);
+      const blob = new Blob([walletData], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      chrome.downloads.download({
+        url: url,
+        filename: 'wallet.wallet'
+      });
+    } catch (error) {
+      alert("Error: " + error.message);
+    }
+  }
+});
+✅ So if someone manages to break it, they'll get a nice error instead of a crash.

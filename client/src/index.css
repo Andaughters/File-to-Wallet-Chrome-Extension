@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: #3498db; /* Clear Sky Blue */
+  --secondary-color: #e74c3c; /* Bright Crimson */
+  --primary-light: #ecf0f1;
+  --secondary-light: #fdedec;
+  --dark-color: #2c3e50; /* Dark Slate */
+  --accent-color: #ffdc00; /* Brighter Sunflower Yellow */
+}
+
+body {
+  font-family: sans-serif;
+  min-width: 360px;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 16px;
+  background-color: #2c3e50; /* Dark Slate background */
+  color: white;
+}
+
+/* Custom color styles */
+.text-primary {
+  color: #3498db !important;
+}
+
+.text-secondary {
+  color: #e74c3c !important;
+}
+
+.text-accent {
+  color: #ffdc00 !important;
+}
+
+.text-dark {
+  color: #2c3e50 !important;
+}
+
+.bg-primary {
+  background-color: #3498db !important;
+}
+
+.bg-secondary {
+  background-color: #e74c3c !important;
+}
+
+.bg-accent {
+  background-color: #ffdc00 !important;
+}
+
+.bg-dark {
+  background-color: #2c3e50 !important;
+}
+
+.border-primary {
+  border-color: #3498db !important;
+}
+
+.border-secondary {
+  border-color: #e74c3c !important;
+}
+
+.border-accent {
+  border-color: #ffdc00 !important;
+}
+
+.hover-bg-primary:hover {
+  background-color: #2980b9 !important;
+}
+
+.hover-bg-secondary:hover {
+  background-color: #c0392b !important;
+}
+
+.hover-bg-accent:hover {
+  background-color: #ffd000 !important;
+}
+
+.bg-primary-light {
+  background-color: #ecf0f1 !important;
+}
+
+.bg-secondary-light {
+  background-color: #fdedec !important;
+}
+
+.focus-primary:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.25) !important;
+  border-color: #3498db !important;
+}
+
+.focus-secondary:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.25) !important;
+  border-color: #e74c3c !important;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-value {
+  height: 100%;
+  background-color: #ffdc00; /* Brighter Sunflower Yellow */
+  animation: indeterminateAnimation 1.5s infinite linear;
+  transform-origin: 0% 50%;
+}
+
+@keyframes indeterminateAnimation {
+  0% {
+    transform: translateX(0) scaleX(0);
+  }
+  40% {
+    transform: translateX(0) scaleX(0.4);
+  }
+  100% {
+    transform: translateX(100%) scaleX(0.5);
+  }
+}

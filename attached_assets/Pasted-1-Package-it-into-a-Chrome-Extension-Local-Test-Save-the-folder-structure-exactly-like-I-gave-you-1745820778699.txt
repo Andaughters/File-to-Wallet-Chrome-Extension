@@ -1,0 +1,119 @@
+1. Package it into a Chrome Extension (Local Test)
+Save the folder structure exactly like I gave you (wallet-converter-extension/).
+
+Fill in your own Google OAuth Client ID and API Key in manifest.json and drive-picker.js.
+
+(I'll show you how in Step 2.)
+
+Open Chrome → go to chrome://extensions/
+
+Turn on Developer Mode (top right).
+
+Click Load unpacked → select your wallet-converter-extension/ folder.
+
+It’ll appear as a testable extension right away.
+
+✅ Boom, extension is running locally.
+
+🧩 2. Set up Google Cloud Console for OAuth2 (for Drive Picker)
+Go to: Google Cloud Console
+
+Create a new project (call it "Wallet Converter").
+
+Go to APIs & Services → Credentials.
+
+Click + CREATE CREDENTIALS → OAuth 2.0 Client ID.
+
+Application type → Chrome App → enter your extension ID (you'll get it after you load it once).
+
+Add OAuth Scopes:
+
+https://www.googleapis.com/auth/drive.readonly
+
+Enable APIs:
+
+Google Drive API
+
+Google Picker API
+
+Copy:
+
+OAuth Client ID → into manifest.json
+
+API Key → into drive-picker.js
+
+Save and reload extension.
+
+✅ Now Google Drive file picking will work.
+
+🔐 3. Basic Security Improvements Before GitHub
+NO private keys or seeds should be logged to the console (make sure you strip all console logs except harmless UI stuff).
+
+Mention in your README that all parsing happens client-side only (privacy).
+
+Optional: encrypt the generated .wallet files with a passphrase before download. (I can show you a lightweight AES encryption if you want.)
+
+✅ That’s enough for MVP safety.
+
+🧹 4. Prep It for GitHub
+Inside your wallet-converter-extension/ folder, create:
+
+.gitignore
+
+plaintext
+Copy
+Edit
+/node_modules
+.DS_Store
+LICENSE
+Pick an open-source license (MIT recommended — allows you or others to use it freely).
+
+Expanded README.md
+
+markdown
+Copy
+Edit
+# Wallet Converter Extension
+
+A Chrome Extension to convert various file types into `.wallet` files for cryptocurrency recovery.
+
+## Features
+- Drag and Drop Local Files
+- Pick Files from Google Drive
+- Generate Electrum `.wallet` format
+- Download for easy import
+
+## Setup
+1. Clone or download this repo.
+2. Fill your Google OAuth Client ID and API Key in `manifest.json` and `drive-picker.js`.
+3. Load unpacked extension at `chrome://extensions/`
+4. Enjoy.
+
+## License
+MIT License.
+✍️ 5. GitHub Push Workflow
+bash
+Copy
+Edit
+# In your terminal:
+cd wallet-converter-extension
+git init
+git remote add origin https://github.com/yourusername/wallet-converter-extension.git
+git add .
+git commit -m "Initial commit: Wallet Converter Extension MVP"
+git push -u origin master
+✅ Now it's on GitHub.
+✅ You have a live portfolio project.
+
+📣 Summary
+
+Step	Status
+Build Extension	✅ (Done)
+Google OAuth Setup	⏳ (Next)
+GitHub Repo	⏳ (Ready after packaging)
+🎯 Your Immediate Next Action:
+👉 Go into Google Cloud Console and set up your OAuth2 + API key.
+(If you want, I’ll walk you through that in 5 minutes flat — just say.)
+
+👉 Then package and push to GitHub following what I wrote above.
+

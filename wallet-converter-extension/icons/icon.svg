@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128px" height="128px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Wallet Converter Icon</title>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="walletGradient">
+            <stop stop-color="#4f46e5" offset="0%"></stop>
+            <stop stop-color="#6366f1" offset="100%"></stop>
+        </linearGradient>
+        <filter x="-15%" y="-15%" width="130%" height="130%" filterUnits="objectBoundingBox" id="shadow">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Background Circle -->
+        <circle id="Background" fill="#FFFFFF" cx="64" cy="64" r="64"></circle>
+        
+        <!-- Wallet Icon -->
+        <g id="Wallet" transform="translate(24.000000, 24.000000)" filter="url(#shadow)">
+            <!-- Main Wallet Body -->
+            <path d="M76,20 L76,60 C76,66.6274 70.6274,72 64,72 L8,72 C3.58172,72 0,68.4183 0,64 L0,8 C0,3.58172 3.58172,0 8,0 L64,0 C70.6274,0 76,5.37258 76,12 L76,20 Z" id="WalletBody" fill="url(#walletGradient)"></path>
+            
+            <!-- Wallet Lock/Card Slot -->
+            <rect id="CardSlot" fill="#FFFFFF" x="58" y="30" width="18" height="20" rx="4"></rect>
+            <circle id="LockDot" fill="#4338ca" cx="67" cy="40" r="4"></circle>
+            
+            <!-- Convert Icon (Arrow) -->
+            <path d="M38,36 L38,28 L50,40 L38,52 L38,44 L18,44 L18,36 L38,36 Z" id="Arrow" fill="#FFFFFF" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>

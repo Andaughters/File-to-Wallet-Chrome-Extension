@@ -1,0 +1,241 @@
+Alright — 🔥 let's build it 🔥
+
+I'm going to lay this out clean and structured so you could start coding immediately or hand it to a dev with no confusion.
+
+📁 Full Folder Structure
+pgsql
+Copy
+Edit
+wallet-converter-extension/
+├── manifest.json
+├── popup.html
+├── popup.js
+├── drive-picker.html
+├── drive-picker.js
+├── wallet-builder.js
+├── styles.css
+├── icons/
+│   └── icon.png
+└── README.md
+🧩 1. manifest.json
+json
+Copy
+Edit
+{
+  "manifest_version": 3,
+  "name": "Wallet File Converter",
+  "version": "1.0",
+  "description": "Convert local or Google Drive files into wallet.dat or .wallet formats.",
+  "permissions": [
+    "storage",
+    "downloads",
+    "identity",
+    "scripting"
+  ],
+  "oauth2": {
+    "client_id": "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/drive.readonly"
+    ]
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon.png",
+      "48": "icons/icon.png",
+      "128": "icons/icon.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "https://www.googleapis.com/"
+  ]
+}
+🧩 2. popup.html
+html
+Copy
+Edit
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wallet Converter</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Wallet Converter</h1>
+
+  <div id="drop_zone">Drag and Drop a File Here</div>
+
+  <button id="browse_local">Browse Local Files</button>
+  <button id="browse_drive">Pick from Google Drive</button>
+
+  <div id="file_info"></div>
+  <button id="generate_wallet" disabled>Generate Wallet File</button>
+
+  <script src="popup.js"></script>
+</body>
+</html>
+🧩 3. styles.css
+css
+Copy
+Edit
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 10px;
+}
+
+#drop_zone {
+  width: 100%;
+  height: 150px;
+  border: 2px dashed #aaa;
+  border-radius: 10px;
+  line-height: 150px;
+  color: #aaa;
+  margin-bottom: 10px;
+}
+🧩 4. popup.js
+javascript
+Copy
+Edit
+document.getElementById('drop_zone').addEventListener('dragover', (e) => {
+  e.preventDefault();
+});
+
+document.getElementById('drop_zone').addEventListener('drop', (e) => {
+  e.preventDefault();
+  handleFile(e.dataTransfer.files[0]);
+});
+
+document.getElementById('browse_local').addEventListener('click', () => {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.onchange = e => handleFile(e.target.files[0]);
+  input.click();
+});
+
+document.getElementById('browse_drive').addEventListener('click', () => {
+  chrome.identity.getAuthToken({interactive: true}, function(token) {
+    const url = chrome.runtime.getURL('drive-picker.html') + '?token=' + token;
+    chrome.tabs.create({url});
+  });
+});
+
+function handleFile(file) {
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    const content = event.target.result;
+    document.getElementById('file_info').innerText = `Loaded: ${file.name}`;
+    window.parsedContent = content;  // Store for later
+    document.getElementById('generate_wallet').disabled = false;
+  };
+  reader.readAsText(file);
+}
+
+document.getElementById('generate_wallet').addEventListener('click', () => {
+  if (window.parsedContent) {
+    const walletData = buildWallet(window.parsedContent);
+    const blob = new Blob([walletData], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    chrome.downloads.download({
+      url: url,
+      filename: 'wallet.wallet'
+    });
+  }
+});
+🧩 5. drive-picker.html
+html
+Copy
+Edit
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pick a File from Google Drive</title>
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script src="drive-picker.js"></script>
+</head>
+<body>
+  <h1>Loading Drive Picker...</h1>
+</body>
+</html>
+🧩 6. drive-picker.js
+javascript
+Copy
+Edit
+const token = new URLSearchParams(window.location.search).get('token');
+
+gapi.load('client:picker', async () => {
+  await gapi.client.init({
+    apiKey: "YOUR_API_KEY",
+    discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]
+  });
+
+  const view = new google.picker.DocsView(google.picker.ViewId.DOCS)
+    .setIncludeFolders(true)
+    .setSelectFolderEnabled(true);
+
+  const picker = new google.picker.PickerBuilder()
+    .setOAuthToken(token)
+    .addView(view)
+    .setCallback(pickerCallback)
+    .build();
+
+  picker.setVisible(true);
+});
+
+function pickerCallback(data) {
+  if (data.action === google.picker.Action.PICKED) {
+    const fileId = data.docs[0].id;
+    downloadFile(fileId);
+  }
+}
+
+function downloadFile(fileId) {
+  gapi.client.request({
+    'path': '/drive/v3/files/' + fileId,
+    'method': 'GET',
+    'params': {'alt': 'media'},
+    'headers': {
+      'Authorization': 'Bearer ' + token
+    }
+  }).then(response => {
+    const blob = new Blob([response.body], {type: 'text/plain'});
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const content = event.target.result;
+      chrome.runtime.sendMessage({content: content});
+    };
+    reader.readAsText(blob);
+  });
+}
+🧩 7. wallet-builder.js
+javascript
+Copy
+Edit
+function buildWallet(fileContent) {
+  // Basic fake Electrum wallet format example
+  const wallet = {
+    "seed_version": 17,
+    "wallet_type": "standard",
+    "keystore": {
+      "type": "imported",
+      "keypairs": {
+        "address": fileContent.trim()
+      }
+    }
+  };
+  return JSON.stringify(wallet, null, 2);
+}
+(You'd later modify this to properly parse and rebuild from private key/mnemonic/etc.)
+
+📋 README Quick Start
+markdown
+Copy
+Edit
+# Wallet Converter Chrome Extension
+
+- Drag and drop files OR pick from Google Drive
+- Parse and generate Electrum .wallet files
+- Download finished wallet files for import

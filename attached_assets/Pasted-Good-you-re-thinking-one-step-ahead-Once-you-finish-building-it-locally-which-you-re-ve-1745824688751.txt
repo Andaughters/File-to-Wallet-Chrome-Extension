@@ -1,0 +1,126 @@
+Good — you're thinking **one step ahead** 🔥.  
+Once you finish building it locally (which you're very close to), you **don't "install"** it the traditional way like a normal Chrome extension from the Web Store —  
+you **"load" it manually into your Chrome browser**.
+
+Super easy. Here's **exactly how**:
+
+---
+
+# 🛠️ How to Install and Test Your Chrome Extension Locally
+
+### 1. Make sure your final project folder looks like this:
+
+```
+wallet-converter-extension/
+├── manifest.json
+├── popup.html
+├── popup.js
+├── wallet-builder.js
+├── styles.css
+├── icons/
+│   └── icon.png
+├── README.md
+├── LICENSE
+├── .gitignore
+```
+✅ (No extra junk — clean.)
+
+---
+
+### 2. Open Google Chrome
+
+- Go to your URL bar and type:
+  
+  ```
+  chrome://extensions/
+  ```
+
+- Press **Enter**.
+
+✅ This opens the Extensions manager page.
+
+---
+
+### 3. Turn ON Developer Mode
+
+- In the top-right corner, there’s a toggle for **Developer mode**.
+- **Turn it ON** (must be ON to load your own extension manually).
+
+---
+
+### 4. Click "Load Unpacked"
+
+- You’ll see a button at the top: **"Load unpacked"**  
+- Click it.
+- It’ll open your file browser.
+
+---
+
+### 5. Select your extension folder
+
+- **Navigate to your project folder** (`wallet-converter-extension/`)
+- **Select the folder**, not the files inside — the whole folder.
+
+✅ Chrome will automatically recognize your `manifest.json`  
+✅ The Wallet Converter extension will appear instantly in your extensions list.
+
+---
+
+# 🖥️ What happens after that:
+
+- You'll see your extension listed in Chrome.
+- You can **pin** it to the toolbar by clicking the puzzle piece 🧩 and pinning it.
+- When you click your extension icon, your **popup.html** will launch — ready to drag-and-drop files and generate wallets!
+
+✅ Full local install done.  
+✅ Testable immediately.
+
+---
+
+# 📋 Summary of Steps:
+
+| Step | Action |
+|:--|:--|
+| 1 | `chrome://extensions/` |
+| 2 | Turn on Developer Mode |
+| 3 | Click "Load unpacked" |
+| 4 | Select your extension project folder |
+| 5 | Done — extension installed locally! |
+
+---
+
+# 🚨 Important notes:
+
+- Every time you **change code**, you must hit the **"Reload"** button on the extension card in `chrome://extensions/`.
+- If you later want to **publish to the Chrome Web Store**, you'll zip the folder and upload it to Google's Developer Console ($5 one-time fee).
+
+---
+
+# 🎯 After you install locally:
+
+- Test file uploads
+- Test wallet generation
+- Test download of `.wallet` file
+- Import `.wallet` into Electrum desktop to fully confirm it works
+
+✅ Then you're fully production-ready.
+
+---
+
+# 📣 So:  
+👉 **Once you finish the final version**,  
+👉 **Follow the steps above**,  
+👉 **You’ll be live inside your own Chrome immediately**.
+
+---
+
+# ⚡ Quick follow-up:
+
+Would you also like me to show you:
+- how to **export your extension folder properly** from Replit?
+- how to **zip the project** if you later want to publish it to the Chrome Web Store?
+
+**Say:** `"show export"` or `"show zip for store"` —  
+and I'll walk you through it fast. 🚀  
+
+You're seriously inches from full launch! 🏁
